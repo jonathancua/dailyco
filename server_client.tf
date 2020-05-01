@@ -1,3 +1,13 @@
+variable "clients" {
+  type = number
+  description = "Number of clients"
+}
+
+variable "loop" {
+  type = number
+  description = "Number of loops"
+}
+
 # Create test server container
 resource "docker_container" "test_server" {
   image = "${docker_image.test_server.latest}"
@@ -18,7 +28,7 @@ resource "docker_container" "test_client" {
   name  = "test_client"
   hostname = "test_client"
   network_mode = "${docker_network.private_network.name}"
-  command = ["/usr/bin/python", "/root/client.py", "--clients=10", "--loop=1"]
+  command = ["/usr/bin/python", "/root/client.py", "--clients=${var.clients}", "--loop=${var.loop}"]
 }
 
 resource "docker_image" "test_server" {
